@@ -6,7 +6,7 @@ function outer() {
   var name = 'Tyler';
   return function() {
     return 'The original name was ' + name;
-  }
+  };
 }
 
 /****** INSTRUCTIONS PROBLEM 1 ******/
@@ -15,9 +15,9 @@ closure over the name variable. Invoke outer saving the return value into
 another variable called 'inner'. */
 
 // Code Here
-
+var inner = outer();
 //Once you do that, invoke inner.
-
+inner();
 //Code Here
 
 
@@ -36,9 +36,9 @@ another variable called 'inner'. */
 
 function callFriend(name) {
   function dial(number) {
-    return 'Calling ' + name + ' at ' + number
+    return 'Calling ' + name + ' at ' + number;
   }
-  return dial
+  return dial;
 }
 
 /****** INSTRUCTIONS PROBLEM 2 ******/
@@ -47,9 +47,8 @@ Create a callJake function that when invoked with '435-555-9248' returns 'Callin
 in your console. */
 
   //Code Here
-
-
-
+var callJake = callFriend('Jake');
+callJake('435-555-9248');
 
 
 
@@ -65,14 +64,19 @@ in your console. */
 properly. */
 
 //Code Here
-
+function makeCounter(){
+  var counter=0;
+  return function(){
+    // console.log(counter);
+    return counter++;
+  };
+}
 //Uncomment this once you make your function
-//   var count = makeCounter();
-//   count(); // 1
-//   count(); // 2
-//   count(); // 3
-//   count(); // 4
-
+  var count = makeCounter();
+  count(); // 1
+  count(); // 2
+  count(); // 3
+  count(); // 4
 
 
 
@@ -91,26 +95,36 @@ properly. */
 up/down counter. The first function is called inc, this function is responsible
 for incrementing the value once. The second function is called dec, this
 function is responsible for decrementing the value by one. You will need to use
-the module pattern to achieve this. 
-Information on the module pattern available here: 
+the module pattern to achieve this.
+Information on the module pattern available here:
 http://stackoverflow.com/questions/17776940/javascript-module-pattern-with-example?answertab=votes#tab-top
 */
 
 function counterFactory(value) {
-
   // Code here.
 
-
   return {
-  }
+    inc:function(){
+      value++;
+      return value;
+    },
+    dec:function(){
+      value--;
+      return value;
+    },
+    getVal:function(){
+      console.log(value);
+    }
+  };
 }
 
 
 counter = counterFactory(10);
-// counter.inc() // 11
-// counter.inc() // 12
-// counter.inc() // 13
-// counter.dec() // 12
+// counter.getVal();
+counter.inc(); // 11
+counter.inc(); // 12
+counter.inc(); // 13
+counter.dec(); // 12
 
 
 
@@ -132,20 +146,18 @@ will return 'You're doing awesome, keep it up firstname lastname.' */
 function motivation(firstname, lastname) {
 
   var welcomeText = 'You\'re doing awesome, keep it up ';
-
+  var message;
   // code message function here.
-
+  return message = function(){
+    return welcomeText+firstname+" "+lastname;
+  }();
 
   //Uncommment this to return the value of your invoked message function
-  //return message();
+  // return message();
 
 }
 
-motivation('Billy', 'Bob'); // 'You're doing awesome keep it up Billy Bob.
-
-
-
-
+// console.log(motivation('Billy', 'Bob')); // 'You're doing awesome keep it up Billy Bob.
 
 
 
@@ -176,11 +188,14 @@ var module = (function() {
   // outside our lexical scope
   return {
     // Code here.
+    publicMethod:function(){
+      return privateMethod();
+    }
   };
 
 })();
 
-
+// console.log(module.publicMethod());
 
 /******************************************************************************\
  #PROBLEM-07
@@ -195,12 +210,14 @@ var secondLevelFriends = ["Anne", "Harry", "Quinton"];
 var allUsers = ["Tom", "Dick", "Harry", "Anne", "Quinton", "Katie", "Mary"];
 
 function findPotentialFriends(existingFriends) {
-
+  return function(user){
+    return existingFriends.indexOf(user)>=0?false:true;
+  };
 }
 
 var isNotAFriend = findPotentialFriends( friends );
-// isNotAFriend(allUsers[0]); // false
-// isNotAFriend(secondLevelFriends[2]); // true
+isNotAFriend(allUsers[0]); // false
+isNotAFriend(secondLevelFriends[2]); // true
 
 
 /******************************************************************************\
@@ -210,9 +227,14 @@ var isNotAFriend = findPotentialFriends( friends );
 method, find all potential second level friends as well as potential friends
 from allUsers. */
 
-var potentialSecondLevelFriends = "?";
-var allPotentialFriends = "?";
-
+var potentialSecondLevelFriends = secondLevelFriends.filter(function(x){
+  return findPotentialFriends(friends)(x);
+});
+var allPotentialFriends = allUsers.filter(function(x){
+  return findPotentialFriends(friends)(x);
+});
+// console.log(allPotentialFriends);
+// console.log(potentialSecondLevelFriends);
 
 /******************************************************************************\
 	#PROBLEM-08
@@ -235,10 +257,28 @@ to 5. What we need to do is console.log(i) so that it logs like so:
  */
 
 function timeOutCounter() {
-  for (var i = 0; i <= 5; i++) {
-    setTimeout(function() {
-    	console.log(i)
-	}, i * 1000)
+  var i;
+  var time = function(j){
+    setTimeout(function(){
+      console.log(j);
+    },j*1000);
+  };
+  for (i = 0; i <= 5; i++) {
+
+
+    time(i)
+    // var time = function(j){
+    //   setTimeout(function(){
+    //     console.log(j)
+    //   },j*1000)
+    // }()
+
+
   }
 }
 timeOutCounter();
+
+
+// setTimeout(function() {
+//     console.log(ready+j)
+// }, i * 1000)
